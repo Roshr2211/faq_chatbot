@@ -48,8 +48,14 @@ Before running the application, make sure you have the following installed:
 5. Install npm dependencies:
    ```bash
    npm install
-
-    
+ ## Usage
+ 1. Start backend server
+    ```bash
+    node server.js
+   - server starts runnning on localhost:3000
+     
+ 2. Start frontend server
+    - on openserver
 
 ## License
 
