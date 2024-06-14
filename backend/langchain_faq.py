@@ -113,10 +113,32 @@ llm = ChatOpenAI(model="gpt-3.5-turbo", temperature=0.7)
 chain = load_qa_chain(llm, chain_type="stuff")
 
 def answer_question(query):
-    # Perform similarity search
+    # Check for specific greeting question
+    if query.strip().lower() in ["who are you","how are you?", "how are you", "how are you doing?"]:
+        return "Hello! I am Silkmark's AI assistant. How can I assist you today?"
+    
+    # Check for website link query
+    if "link to your website" in query.strip().lower():
+        return "You can visit the Silk Mark website at: [www.silkmarkindia.com](http://www.silkmarkindia.com)"
+    
+    # Check for contact details query
+    if "contact details" in query.strip().lower() or "how to contact" in query.strip().lower():
+        return "You can contact Silk Mark at: \nPhone: 123-456-7890 \nEmail: info@silkmarkindia.com \nVisit: www.silkmarkindia.com"
+
+    # Perform similarity search for other questions
     docs = docsearch.similarity_search(query)
+    
+    # If no relevant document is found, provide a fallback response
+    if not docs:
+        return "I'm not sure about that. Please visit the Silk Mark website at: [www.silkmarkindia.com](http://www.silkmarkindia.com) for more information."
+
     # Run the chain to get the answer
     response = chain.run(input_documents=docs, question=query)
+    
+    # Check if the response is confident or not
+    if "I don't know" in response or "I'm not sure" in response:
+        return "I'm not sure about that. Please visit the Silk Mark website at: [www.silkmarkindia.com](http://www.silkmarkindia.com) for more information."
+
     return response
 
 if __name__ == "__main__":
