@@ -14,58 +14,111 @@
             height: 100vh;
             margin: 0;
         }
-        .container {
-            background-color: #fff;
-            padding: 20px;
+        .chat-container {
+            background-color:#333;
             border-radius: 8px;
             box-shadow: 0 0 10px rgba(0, 0, 0, 0.1);
-            width: 400px;
+            width: 33%;
+            height: 95%;
+            display: flex;
+            flex-direction: column;
+        }
+        .chat-header {
+            padding: 20px;
+            background-color: #ff4800;
+            color: #fff;
             text-align: center;
+            border-top-left-radius: 8px;
+            border-top-right-radius: 8px;
         }
-        .container h1 {
-            margin-bottom: 20px;
+        .chat-body {
+            flex: 1;
+            padding: 20px;
+            overflow-y: auto;
         }
-        .container input[type="text"] {
-            width: calc(100% - 22px);
+        .chat-footer {
             padding: 10px;
-            margin-bottom: 10px;
+            display: flex;
+            align-items: center;
+            border-top: 1px solid #ccc;
+        }
+        .chat-footer input[type="text"] {
+            flex: 1;
+            padding: 25px;
+            font-size: x-large;
             border: 1px solid #ccc;
             border-radius: 4px;
         }
-        .container button {
-            padding: 10px 20px;
+        .chat-footer button {
+            padding: 20px 30px;
             border: none;
             border-radius: 4px;
-            background-color: #007BFF;
+            background-color: #ff0000;
             color: #fff;
             cursor: pointer;
+            font-size: x-large;
+            margin-left: 10px;
         }
-        .container button:hover {
+        .chat-footer button:hover {
             background-color: #0056b3;
         }
-        .container .response {
-            margin-top: 20px;
+        .message {
+            margin-bottom: 15px;
+        }
+        .message.user {
+            text-align: right;
+        }
+        .message.bot {
             text-align: left;
+        }
+        .message p {
+            display: inline-block;
+            padding: 20px;
+            border-radius: 10px;
+            max-width: 80%;
+            font-size: x-large;
+        }
+        .message.user p {
+            background-color: #ff6200;
+            color: #fff;
+        }
+        .message.bot p {
+            background-color: #f1f1f1;
+            color: #333;
         }
     </style>
 </head>
 <body>
-    <div class="container">
-        <h1>Silk FAQ Chatbot</h1>
-        <input type="text" id="question" placeholder="Ask a question about silk...">
-        <button onclick="askQuestion()">Ask</button>
-        <div class="response" id="response"></div>
+    <div class="chat-container">
+        <div class="chat-header">
+            <h1>Silk FAQ Chatbot</h1>
+        </div>
+        <div class="chat-body" id="chatBody">
+            <!-- Messages will appear here -->
+        </div>
+        <div class="chat-footer">
+            <input type="text" id="question" placeholder="Ask a question about silk..." onkeydown="if(event.key==='Enter'){askQuestion()}">
+            <button onclick="askQuestion()">Send</button>
+        </div>
     </div>
 
     <script>
         function askQuestion() {
             const question = document.getElementById('question').value;
-            const responseDiv = document.getElementById('response');
+            const chatBody = document.getElementById('chatBody');
 
             if (!question) {
-                responseDiv.innerHTML = '<p style="color: red;">Please enter a question.</p>';
                 return;
             }
+
+            // Add user question to chat body
+            const userMessage = document.createElement('div');
+            userMessage.className = 'message user';
+            userMessage.innerHTML = `<p>${question}</p>`;
+            chatBody.appendChild(userMessage);
+
+            // Clear the input field
+            document.getElementById('question').value = '';
 
             fetch('http://localhost:3000/chat', {
                 method: 'POST',
@@ -76,15 +129,24 @@
             })
             .then(response => response.json())
             .then(data => {
-                if (data.error) {
-                    responseDiv.innerHTML = `<p style="color: red;">Error: ${data.error}</p>`;
-                } else {
-                    responseDiv.innerHTML = `<p><strong>Answer:</strong> ${data.answer}</p>`;
-                }
+                // Add bot response to chat body
+                const botMessage = document.createElement('div');
+                botMessage.className = 'message bot';
+                botMessage.innerHTML = `<p>${data.answer}</p>`;
+                chatBody.appendChild(botMessage);
+
+                // Scroll to the bottom of the chat body
+                chatBody.scrollTop = chatBody.scrollHeight;
             })
             .catch(error => {
                 console.error('Error:', error);
-                responseDiv.innerHTML = '<p style="color: red;">Failed to get an answer from the chatbot.</p>';
+                const errorMessage = document.createElement('div');
+                errorMessage.className = 'message bot';
+                errorMessage.innerHTML = '<p style="color: red;">Failed to get an answer from the chatbot.</p>';
+                chatBody.appendChild(errorMessage);
+
+                // Scroll to the bottom of the chat body
+                chatBody.scrollTop = chatBody.scrollHeight;
             });
         }
     </script>
