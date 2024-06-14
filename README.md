@@ -18,8 +18,38 @@ This chatbot utilizes OpenAI's GPT-3.5 language model along with LangChain to pr
 
 ![image](https://github.com/Roshr2211/faq_chatbot/assets/136987759/ad0b142a-393a-4975-a645-6550a4c1d486)
 
+## Prerequisites
 
+Before running the application, make sure you have the following installed:
 
+- Node.js (for running the frontend server)
+- Python 3.x (for running the backend server)
+- npm (Node Package Manager)
+
+ ## Installation
+
+1. Clone the repository:
+
+   ```bash
+   git clone https://github.com/Roshr2211/faq_chatbot.git
+   cd faq_chatbot
+  2. Set up backend (Python environment):
+- Navigate to the backend directory:
+  ```bash
+  cd backend  
+3. Install Python dependencies:
+   ```bash
+   pip install -r requirements.txt  
+   
+4. Set up the frontend (Node.js environment):
+   ```bash
+   cd ../frontend
+
+5. Install npm dependencies:
+   ```bash
+   npm install
+
+    
 
 ## License
 
