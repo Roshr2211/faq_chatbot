@@ -57,6 +57,9 @@ Before running the application, make sure you have the following installed:
  2. Start frontend server
     - on openserver
 
+   # Deployment
+   https://silk-faq-chatbot-murt7jdhh-roshni-rs-projects.vercel.app/
+
 ## License
 
 This project is licensed under the MIT License - see the [LICENSE](LICENSE) file for details.
