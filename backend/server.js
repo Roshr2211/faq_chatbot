@@ -9,6 +9,7 @@ dotenv.config();
 
 const app = express();
 const port = 3000;
+app.use(express.static(path.join(__dirname, '../frontend')));
 
 app.use(bodyParser.json());
 app.use(cors());
